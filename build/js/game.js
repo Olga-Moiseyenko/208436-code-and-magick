@@ -395,18 +395,55 @@ window.Game = (function() {
      * Отрисовка экрана паузы.
      */
     _drawPauseScreen: function() {
+      var canvas = document.querySelector('canvas');
+      var ctx = canvas.getContext('2d');
+      var ROW_HEIGHT = 20;
+      var msg = '';
+      var i = 0;
+      var y = 150;
+      var drawRectangle = function(ctxIn, moveX, moveY) {
+        ctxIn.beginPath();
+        ctxIn.moveTo(300 + moveX, 220 + moveY);
+        ctxIn.lineTo(325 + moveX, 130 + moveY);
+        ctxIn.lineTo(675 + moveX, 110 + moveY);
+        ctxIn.lineTo(610 + moveX, 220 + moveY);
+        ctxIn.closePath();
+        ctxIn.stroke();
+        ctxIn.fill();
+      };
+      var doMsg = function(msgIn) {
+        while(i < msgIn.length) {
+          ctx.fillText(msgIn[i], 330, y);
+          y = y + ROW_HEIGHT;
+          i++;
+        }
+      };
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      drawRectangle(ctx, 10, 10);
+      ctx.fillStyle = 'white';
+      drawRectangle(ctx, 0, 0);
+      ctx.fillStyle = 'black';
+      ctx.font = '16px PT Mono';
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          console.log('you have won!');
+          // console.log('you have won!');
+          msg = ['Поздравляем с победой!', 'Вы это заслужили!', 'И много печенек тоже!'];
+          doMsg(msg);
           break;
         case Verdict.FAIL:
-          console.log('you have failed!');
+          // console.log('you have failed!');
+          msg = ['Вы проиграли!', 'Попробуйте еще раз!'];
+          doMsg(msg);
           break;
         case Verdict.PAUSE:
-          console.log('game is on pause!');
+          // console.log('game is on pause!');
+          msg = ['Игра на паузе! Игра игрой, ', 'а обед по расписанию', 'Приятного аппетита!'];
+          doMsg(msg);
           break;
         case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
+          // console.log('welcome to the game! Press Space to start');
+          msg = ['Добро пожаловать! Все просто,', 'если нажать шифт, я стреляю,', 'а с помощью стрелок я двигаюсь.', 'Удачи!'];
+          doMsg(msg);
           break;
       }
     },
