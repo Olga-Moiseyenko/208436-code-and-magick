@@ -454,22 +454,18 @@ window.Game = (function() {
       ctx.font = '16px PT Mono';
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          // console.log('you have won!');
           msg = 'Поздравляем с победой! Вы это заслужили! И много печенек тоже!';
           doTxtAuto(msg, widthR);
           break;
         case Verdict.FAIL:
-          // console.log('you have failed!');
           msg = 'Вы проиграли! Попробуйте еще раз!';
           doTxtAuto(msg, widthR);
           break;
         case Verdict.PAUSE:
-          // console.log('game is on pause!');
           msg = 'Игра на паузе! Игра игрой, а обед по расписанию. Приятного аппетита!';
           doTxtAuto(msg, widthR);
           break;
         case Verdict.INTRO:
-          // console.log('welcome to the game! Press Space to start');
           msg = 'Добро пожаловать! Все просто, если нажать шифт, я стреляю, а с помощью стрелок я двигаюсь. Удачи!';
           doTxtAuto(msg, widthR);
           break;
