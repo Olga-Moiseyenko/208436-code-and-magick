@@ -397,53 +397,81 @@ window.Game = (function() {
     _drawPauseScreen: function() {
       var canvas = document.querySelector('canvas');
       var ctx = canvas.getContext('2d');
-      var ROW_HEIGHT = 20;
+      var doTxtAuto = function(txtIn, widthIn) {
+        var startCoord = 150;
+        ctx.fillStyle = 'black';
+        ctx.font = '16px PT Mono';
+        var txtWord = ''; //слово
+        var txtRow = ''; //строка
+        var txtWidth = 0; //длина слова
+        var wordWidth = 0; //длина строки
+        var spaceWidth = ctx.measureText(' ').width; //длина пробела
+        var j = 0;
+        var wordHeight = 20;
+        while(j < txtIn.length) {
+          if ((txtIn[j] !== ' ') && (j !== txtIn.length - 1)) {
+            txtWord = txtWord + txtIn[j];
+          } else {
+            if (j === (txtIn.length - 1)) {
+              txtWord = txtWord + txtIn[j];
+            }
+            wordWidth = ctx.measureText(txtWord).width;
+            txtWidth = txtWidth + wordWidth;
+            if (txtWidth <= widthIn) {
+              txtRow = txtRow + txtWord + ' ';
+              txtWidth = txtWidth + spaceWidth;
+              txtWord = '';
+            } else {
+              ctx.fillText(txtRow, 325, startCoord);
+              txtRow = txtWord + ' ';
+              txtWidth = wordWidth + spaceWidth;
+              startCoord = startCoord + wordHeight;
+              txtWord = '';
+            }
+          }
+          j++;
+        }
+        txtRow = txtRow + txtWord;
+        ctx.fillText(txtRow, 325, startCoord);
+      };
       var msg = '';
-      var i = 0;
-      var y = 150;
-      var drawRectangle = function(ctxIn, moveX, moveY) {
+      var drawRectangle = function(ctxIn, moveX, moveY, widthIn) {
         ctxIn.beginPath();
         ctxIn.moveTo(300 + moveX, 220 + moveY);
         ctxIn.lineTo(325 + moveX, 130 + moveY);
-        ctxIn.lineTo(675 + moveX, 110 + moveY);
-        ctxIn.lineTo(610 + moveX, 220 + moveY);
+        ctxIn.lineTo(390 + widthIn + moveX, 110 + moveY);
+        ctxIn.lineTo(325 + widthIn + moveX, 220 + moveY);
         ctxIn.closePath();
         ctxIn.stroke();
         ctxIn.fill();
       };
-      var doMsg = function(msgIn) {
-        while(i < msgIn.length) {
-          ctx.fillText(msgIn[i], 330, y);
-          y = y + ROW_HEIGHT;
-          i++;
-        }
-      };
+      var widthR = 285; // ширина текстового поля
       ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-      drawRectangle(ctx, 10, 10);
+      drawRectangle(ctx, 10, 10, widthR);
       ctx.fillStyle = 'white';
-      drawRectangle(ctx, 0, 0);
+      drawRectangle(ctx, 0, 0, widthR);
       ctx.fillStyle = 'black';
       ctx.font = '16px PT Mono';
       switch (this.state.currentStatus) {
         case Verdict.WIN:
           // console.log('you have won!');
-          msg = ['Поздравляем с победой!', 'Вы это заслужили!', 'И много печенек тоже!'];
-          doMsg(msg);
+          msg = 'Поздравляем с победой! Вы это заслужили! И много печенек тоже!';
+          doTxtAuto(msg, widthR);
           break;
         case Verdict.FAIL:
           // console.log('you have failed!');
-          msg = ['Вы проиграли!', 'Попробуйте еще раз!'];
-          doMsg(msg);
+          msg = 'Вы проиграли! Попробуйте еще раз!';
+          doTxtAuto(msg, widthR);
           break;
         case Verdict.PAUSE:
           // console.log('game is on pause!');
-          msg = ['Игра на паузе! Игра игрой, ', 'а обед по расписанию', 'Приятного аппетита!'];
-          doMsg(msg);
+          msg = 'Игра на паузе! Игра игрой, а обед по расписанию. Приятного аппетита!';
+          doTxtAuto(msg, widthR);
           break;
         case Verdict.INTRO:
           // console.log('welcome to the game! Press Space to start');
-          msg = ['Добро пожаловать! Все просто,', 'если нажать шифт, я стреляю,', 'а с помощью стрелок я двигаюсь.', 'Удачи!'];
-          doMsg(msg);
+          msg = 'Добро пожаловать! Все просто, если нажать шифт, я стреляю, а с помощью стрелок я двигаюсь. Удачи!';
+          doTxtAuto(msg, widthR);
           break;
       }
     },
