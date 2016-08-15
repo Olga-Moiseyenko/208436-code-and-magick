@@ -395,18 +395,95 @@ window.Game = (function() {
      * Отрисовка экрана паузы.
      */
     _drawPauseScreen: function() {
+      var canvas = document.querySelector('canvas');
+      var ctx = canvas.getContext('2d');
+      var msg = '';
+      var widthR = 285; // ширина текстового поля
+      var startX = 290;
+      var startY = 110;
+      function getFontHeight(font) {
+        var parent = document.createElement('span');
+        parent.appendChild(document.createTextNode('height'));
+        document.body.appendChild(parent);
+        parent.style.cssText = 'font: ' + font + '; white-space: nowrap; display: inline;';
+        var height = parent.offsetHeight;
+        document.body.removeChild(parent);
+        return height;
+      }
+      var drawRectangle = function(ctxIn, moveX, moveY, widthIn, fontHeightIn) {
+        ctxIn.beginPath();
+        ctxIn.moveTo(startX + moveX, startY + moveY + 5);
+        ctxIn.lineTo(startX + widthIn + moveX + 10, startY + moveY + 5);
+        ctxIn.lineTo(startX + widthIn + moveX + 10, startY + fontHeightIn + moveY + 5);
+        ctxIn.lineTo(startX + moveX, startY + fontHeightIn + moveY + 5);
+        ctxIn.closePath();
+        ctxIn.fill();
+      };
+      var doTxtAuto = function(txtIn, widthIn) {
+        var txtWord = ''; //слово
+        var txtRow = ''; //строка
+        var txtWidth = 0; //длина слова
+        var wordWidth = 0; //длина строки
+        var spaceWidth = ctx.measureText(' ').width; //длина пробела
+        var j = 0;
+        ctx.fillStyle = 'black';
+        ctx.font = '16px PT Mono';
+        var fontHeight = getFontHeight(ctx.font);
+        while(j < txtIn.length) {
+          if ((txtIn[j] !== ' ') && (j !== txtIn.length - 1)) {
+            txtWord = txtWord + txtIn[j];
+          } else {
+            if (j === (txtIn.length - 1)) {
+              txtWord = txtWord + txtIn[j];
+            }
+            wordWidth = ctx.measureText(txtWord).width;
+            txtWidth = txtWidth + wordWidth;
+            if (txtWidth <= widthIn) {
+              txtRow = txtRow + txtWord + ' ';
+              txtWidth = txtWidth + spaceWidth;
+              txtWord = '';
+            } else {
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+              drawRectangle(ctx, 10, 10, widthR, fontHeight);
+              ctx.fillStyle = 'white';
+              drawRectangle(ctx, 0, 0, widthR, fontHeight);
+              startY = startY + fontHeight;
+              ctx.fillStyle = 'black';
+              ctx.fillText(txtRow, startX + 10, startY);
+              txtRow = txtWord + ' ';
+              txtWidth = wordWidth + spaceWidth;
+              txtWord = '';
+            }
+          }
+          j++;
+        }
+        txtRow = txtRow + txtWord;
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        drawRectangle(ctx, 10, 10, widthR, fontHeight);
+        ctx.fillStyle = 'white';
+        drawRectangle(ctx, 0, 0, widthR, fontHeight);
+        startY = startY + fontHeight;
+        ctx.fillStyle = 'black';
+        ctx.fillText(txtRow, startX + 10, startY);
+      };
+      ctx.fillStyle = 'black';
+      ctx.font = '16px PT Mono';
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          console.log('you have won!');
+          msg = 'Поздравляем с победой! Вы это заслужили! И много печенек тоже!';
+          doTxtAuto(msg, widthR);
           break;
         case Verdict.FAIL:
-          console.log('you have failed!');
+          msg = 'Вы проиграли! Попробуйте еще раз!';
+          doTxtAuto(msg, widthR);
           break;
         case Verdict.PAUSE:
-          console.log('game is on pause!');
+          msg = 'Игра на паузе! Игра игрой, а обед по расписанию. Приятного аппетита!';
+          doTxtAuto(msg, widthR);
           break;
         case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
+          msg = 'Добро пожаловать! Все просто, если нажать шифт, я стреляю, а с помощью стрелок я двигаюсь. Удачи!';
+          doTxtAuto(msg, widthR);
           break;
       }
     },
