@@ -2,19 +2,12 @@
 
 var loadReviews = function(url, callback) {
   var elem = document.createElement('script');
-  elem.src = url;
+  elem.src = url + '?callback=' + callback;
   document.head.appendChild(elem);
-  var reviews = [];
+
   window.JSONPCallback = function(data) {
-    console.log('2');
-    reviews = data;
-    console.log(reviews);
+    window.reviews = data;
   };
-  if (typeof callback === 'function') {
-    callback(reviews);
-  }
 };
 
-loadReviews('http://localhost:1506/api/reviews?callback=<JSONPCallback>', function(reviews) {
-  return reviews;
-});
+loadReviews('http://localhost:1506/api/reviews', 'JSONPCallback');
