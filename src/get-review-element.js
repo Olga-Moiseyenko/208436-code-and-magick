@@ -1,6 +1,6 @@
 'use strict';
 
-window.getReviewElement = (function() {
+module.exports = (function() {
   var templateElement = document.querySelector('template');
   var elementToClone;
 

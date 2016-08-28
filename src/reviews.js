@@ -5,13 +5,17 @@
   var reviewsFilter = document.querySelector('.reviews-filter');
   reviewsFilter.classList.add('invisible');
 
+  var loadReviews = require('./load');
+  var getReviewElement = require('./get-review-element');
+
   var getReviews = function(reviews) {
+    console.log(reviews);
     reviews.forEach(function(review) {
-      window.getReviewElement(review, reviewsList);
+      getReviewElement(review, reviewsList);
     });
   };
 
-  window.loadReviews('http://localhost:1506/api/reviews?callback=<JSONPCallback>', getReviews);
+  loadReviews('http://localhost:1506/api/reviews?callback=<JSONPCallback>', getReviews);
 
   reviewsFilter.classList.remove('invisible');
 })();
