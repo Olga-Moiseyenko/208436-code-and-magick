@@ -104,7 +104,7 @@ reviewText.oninput = function() {
   reviewSubmit.disabled = statusButton;
 };
 
-window.form = (function() {
+module.exports = (function() {
 
   var formContainer = document.querySelector('.overlay-container');
   var formCloseButton = document.querySelector('.review-form-close');
