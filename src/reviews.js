@@ -9,7 +9,6 @@
   var getReviewElement = require('./get-review-element');
 
   var getReviews = function(reviews) {
-    console.log(reviews);
     reviews.forEach(function(review) {
       getReviewElement(review, reviewsList);
     });
