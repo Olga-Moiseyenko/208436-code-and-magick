@@ -1,6 +1,5 @@
 'use strict';
 
-var photogallery = document.querySelector('.photogallery');
 var overlayGallery = document.querySelector('.overlay-gallery');
 var overlayLeft = document.querySelector('.overlay-gallery-control-left');
 var overlayRight = document.querySelector('.overlay-gallery-control-right');
@@ -9,7 +8,6 @@ var previewNumbTotal = document.querySelector('.preview-number-total');
 var overlayClose = document.querySelector('.overlay-gallery-close');
 var galleryPreview = document.querySelector('.overlay-gallery-preview');
 var activePicture = 0;
-var pictures = [];
 
 var Gallery = function(data) {
   this.pictures = data;
@@ -32,34 +30,42 @@ var Gallery = function(data) {
   };
 };
 
-Gallery.prototype.hide = function() {
-  photogallery.classList.add('invisible');
-};
+Gallery.prototype = {
+  hide: function() {
+    console.dir(this);
+    overlayGallery.classList.add('invisible');
+  },
+  onCloseClick: function() {
+    Gallery.prototype.hide();
+  },
 
-Gallery.prototype.onCloseClick = function() {
-  Gallery.prototype.hide();
-};
+  show: function(activePic) {
+    this.overlayClose.onclick = this.onCloseClick;
+    this.overlayLeft.onclick = this.onLeftClick;
+    this.overlayRight.onclick = this.onRightClick;
+    this.overlayGallery.classList.remove('invisible');
+    this.setActivePicture(activePic);
+  },
 
-Gallery.prototype.setActivePicture = function(activePic) {
-  activePicture = activePic;
-  var photoImage = new Image();
-  photoImage.src = pictures[activePicture];
-  galleryPreview.appendChild = photoImage;
-  previewNumbCurrent = activePicture + 1;
-};
+  setActivePicture: function(activePic) {
+    this.activePicture = activePic;
+    var photoImage = document.createElement('img');
+    photoImage.src = this.pictures[this.activePicture];
 
-Gallery.prototype.onLeftClick = function() {
-  Gallery.prototype.setActivePicture(previewNumbCurrent - 1);
-};
+    galleryPreview.appendChild(photoImage);
+    this.previewNumbCurrent.value = this.activePicture + 1;
+  },
 
-Gallery.prototype.onRightClick = function() {
-  Gallery.prototype.setActivePicture(previewNumbCurrent + 1);
-};
+  onLeftClick: function() {
+    Gallery.prototype.setActivePicture(this.previewNumbCurrent.value - 1);
+  },
 
-Gallery.prototype.show = function(activePic) {
-  overlayClose.onclick = Gallery.prototype.onCloseClick;
-  photogallery.classList.remove('invisible');
-  Gallery.prototype.setActivePicture(activePic);
+  onRightClick: function() {
+    console.dir(self);
+    console.log(this.previewNumbCurrent.value - 1);
+    Gallery.prototype.setActivePicture(this.previewNumbCurrent.value - 1);
+  }
+
 };
 
 module.exports = Gallery;

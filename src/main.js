@@ -22,22 +22,19 @@ var Gallery = require('./gallery');
     });
   };
 
-  var picturesAll = document.querySelectorAll('a.photogallery-image img');
+  var picturesAll = document.querySelectorAll('a.photogallery-image');
   var pictures = [];
-  var i = 0;
-  while(i < picturesAll.length) {
-    pictures.push(picturesAll.src);
-    i++;
-  }
-  var gallery = new Gallery(pictures);
+  Array.prototype.slice.call(picturesAll).forEach(function(item) {
+    pictures.push(item.firstChild.src);
+  });
 
-  var photoReference = document.querySelectorAll('a.photogallery-image');
-  i = 0;
-  while(i < photoReference.length) {
-    photoReference[i].onclick = function() {
-      console.log(pictures[i]);
-      gallery.activePic = pictures[i];
-      Gallery.show(Gallery.gallery);
+  var gallery = new Gallery(pictures);
+  var i = 0;
+
+  while(i < picturesAll.length) {
+    picturesAll[i].onclick = function(e) {
+      e.preventDefault();
+      gallery.show(pictures.indexOf(this.firstChild.src));
     };
     i++;
   }
