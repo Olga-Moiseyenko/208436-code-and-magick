@@ -2,9 +2,9 @@
 var form = require('./form');
 var Game = require('./game');
 require('./reviews');
+var Gallery = require('./gallery');
 
-
-module.exports = (function() {
+(function() {
 
   var game = new Game(document.querySelector('.demo'));
   game.initializeLevelAndStart();
@@ -21,6 +21,26 @@ module.exports = (function() {
       game.setDeactivated(true);
     });
   };
+
+  var picturesAll = document.querySelectorAll('a.photogallery-image img');
+  var pictures = [];
+  var i = 0;
+  while(i < picturesAll.length) {
+    pictures.push(picturesAll.src);
+    i++;
+  }
+  var gallery = new Gallery(pictures);
+
+  var photoReference = document.querySelectorAll('a.photogallery-image');
+  i = 0;
+  while(i < photoReference.length) {
+    photoReference[i].onclick = function() {
+      console.log(pictures[i]);
+      gallery.activePic = pictures[i];
+      Gallery.show(Gallery.gallery);
+    };
+    i++;
+  }
 
   form.onClose = function() {
     game.setDeactivated(false);
