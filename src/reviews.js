@@ -1,20 +1,19 @@
 'use strict';
 
-(function() {
-  var reviewsList = document.querySelector('.reviews-list');
-  var reviewsFilter = document.querySelector('.reviews-filter');
-  reviewsFilter.classList.add('invisible');
+var loadReviews = require('./load');
+var Review = require('./review');
 
-  var loadReviews = require('./load');
-  var getReviewElement = require('./get-review-element');
+var reviewsList = document.querySelector('.reviews-list');
+var reviewsFilter = document.querySelector('.reviews-filter');
+reviewsFilter.classList.add('invisible');
 
-  var getReviews = function(reviews) {
-    reviews.forEach(function(review) {
-      getReviewElement(review, reviewsList);
-    });
-  };
+var getReviews = function(reviews) {
+  reviews.forEach(function(review) {
+    var rev = new Review(review);
+    reviewsList.appendChild(rev.element);
+  });
+};
 
-  loadReviews('http://localhost:1506/api/reviews?callback=<JSONPCallback>', getReviews);
+loadReviews('http://localhost:1506/api/reviews?callback=<JSONPCallback>', getReviews);
 
-  reviewsFilter.classList.remove('invisible');
-})();
+reviewsFilter.classList.remove('invisible');

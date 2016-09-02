@@ -34,9 +34,9 @@ var Gallery = require('./gallery');
   while(i < picturesAll.length) {
     picturesAll[i].onclick = function(e) {
       e.preventDefault();
-      var cuurentPic = pictures.indexOf(this.firstChild.src);
-      if (cuurentPic < 5) {
-        gallery.show(cuurentPic);
+      var currentPic = pictures.indexOf(this.firstChild.src);
+      if (currentPic < 5) {
+        gallery.show(currentPic);
       }
     };
     i++;
