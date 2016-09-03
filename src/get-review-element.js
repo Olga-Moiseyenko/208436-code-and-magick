@@ -9,13 +9,10 @@ if ('content' in templateElement) {
   elementToClone = templateElement.querySelector('.review');
 }
 
-module.exports = function(data, list) {
+module.exports = function(data) {
   var element = elementToClone.cloneNode(true);
   element.querySelector('.review-rating').textContent = data.rating;
   element.querySelector('.review-text').textContent = data.description;
-  element.querySelector('.review-quiz').textContent = data.review_usefulness;
-  list.appendChild(element);
-
   var photoImage = new Image(124, 124);
 
   photoImage.onload = function(evt) {
