@@ -22,7 +22,7 @@ var getReviews = function(reviews) {
 var loadPageReviews = function(currentPageNumber, filter) {
   loadReviews('/api/reviews', {
     from: currentPageNumber * pageSize,
-    to: currentPageNumber + pageSize,
+    to: currentPageNumber * pageSize + pageSize,
     filter: filter
   }, getReviews);
 };
@@ -36,12 +36,12 @@ var changeFilters = function(filterID) {
 
 reviewsMore.addEventListener('click', function() {
   loadPageReviews(pageNumber++, currentFilter);
-}, getReviews);
+});
 
 reviewsFilter.addEventListener('change', function(evt) {
-  if(evt.target.classList.contains('reviews-filter')) {
-    changeFilters(evt.target.id);
-  }
+
+  changeFilters(evt.target.id);
+
 });
 
 changeFilters(currentFilter);
