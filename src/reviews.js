@@ -5,6 +5,11 @@ var Review = require('./review');
 
 var reviewsList = document.querySelector('.reviews-list');
 var reviewsFilter = document.querySelector('.reviews-filter');
+var reviewsMore = document.querySelector('.reviews-controls-more');
+
+var pageNumber = 0;
+var pageSize = 3;
+var currentFilter = 'all';
 reviewsFilter.classList.add('invisible');
 
 var getReviews = function(reviews) {
@@ -14,6 +19,31 @@ var getReviews = function(reviews) {
   });
 };
 
-loadReviews('http://localhost:1506/api/reviews?callback=<JSONPCallback>', getReviews);
+var loadPageReviews = function(currentPageNumber, filter) {
+  loadReviews('/api/reviews', {
+    from: currentPageNumber * pageSize,
+    to: currentPageNumber * pageSize + pageSize,
+    filter: filter
+  }, getReviews);
+};
+
+var changeFilters = function(filterID) {
+  reviewsList.innerHTML = '';
+  currentFilter = filterID;
+  pageNumber = 0;
+  loadPageReviews(pageNumber++, currentFilter);
+};
+
+reviewsMore.addEventListener('click', function() {
+  loadPageReviews(pageNumber++, currentFilter);
+});
+
+reviewsFilter.addEventListener('change', function(evt) {
+
+  changeFilters(evt.target.id);
+
+});
+
+changeFilters(currentFilter);
 
 reviewsFilter.classList.remove('invisible');
