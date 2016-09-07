@@ -278,7 +278,7 @@ module.exports = (function() {
     level: INITIAL_LEVEL,
 
     _onScroll: function() {
-      var scrollMove = document.body.scrollTop;
+      var scrollMove = document.documentElement.scrollTop || document.body.scrollTop;
 
       if(isMoveClouds) {
         headerClouds.style.backgroundPosition = '' + scrollMove + 'px';
