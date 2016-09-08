@@ -283,8 +283,7 @@ module.exports = (function() {
       if(isMoveClouds) {
         headerClouds.style.backgroundPosition = '' + scrollMove + 'px';
       }
-
-      if(Date.now() - lastCheck >= THROTTLE_TIMEOUT) {
+      this.throttle(function() {
         if(scrollMove > scrollHeight) {
           isMoveClouds = false;
         } else {
@@ -294,10 +293,17 @@ module.exports = (function() {
           this.setGameStatus(Verdict.PAUSE);
         } else {
           this.setGameStatus(Verdict.CONTINUE);
-        }
+        } }, THROTTLE_TIMEOUT
+      );
+    },
+
+    throttle: function(functionToOptimize, throttleTimeout) {
+      if(Date.now() - lastCheck >= throttleTimeout) {
+        functionToOptimize(this);
       }
       lastCheck = Date.now();
     },
+
     /** @param {boolean} deactivated */
     setDeactivated: function(deactivated) {
       if (this._deactivated === deactivated) {
