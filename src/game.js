@@ -283,21 +283,28 @@ module.exports = (function() {
       if(isMoveClouds) {
         headerClouds.style.backgroundPosition = '' + scrollMove + 'px';
       }
-
-      if(Date.now() - lastCheck >= THROTTLE_TIMEOUT) {
+      var self = this;
+      this.throttle(function() {
         if(scrollMove > scrollHeight) {
           isMoveClouds = false;
         } else {
           isMoveClouds = true;
         }
         if(scrollMove > demoSize.bottom) {
-          this.setGameStatus(Verdict.PAUSE);
+          self.setGameStatus(Verdict.PAUSE);
         } else {
-          this.setGameStatus(Verdict.CONTINUE);
-        }
+          self.setGameStatus(Verdict.CONTINUE);
+        } }, THROTTLE_TIMEOUT
+      );
+    },
+
+    throttle: function(functionToOptimize, throttleTimeout) {
+      if(Date.now() - lastCheck >= throttleTimeout) {
+        functionToOptimize();
       }
       lastCheck = Date.now();
     },
+
     /** @param {boolean} deactivated */
     setDeactivated: function(deactivated) {
       if (this._deactivated === deactivated) {
