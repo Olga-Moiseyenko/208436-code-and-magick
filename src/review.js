@@ -7,13 +7,10 @@ var Review = function(data) {
   this.element = getReviewElement(data);
   this.quizAnswerYes = this.element.querySelector('.review-quiz-answer-yes');
   this.quizAnswerNo = this.element.querySelector('.review-quiz-answer-no');
-  var self = this;
-  this.quizAnswerYes.onclick = function() {
-    self.onReviewYesClick();
-  };
-  this.quizAnswerNo.onclick = function() {
-    self.onReviewNoClick();
-  };
+  this.onReviewYesClick = this.onReviewYesClick.bind(this);
+  this.quizAnswerYes.addEventListener('click', this.onReviewYesClick);
+  this.onReviewNoClick = this.onReviewNoClick.bind(this);
+  this.quizAnswerNo.addEventListener('click', this.onReviewNoClick);
 };
 
 Review.prototype = {

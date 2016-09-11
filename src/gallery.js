@@ -19,61 +19,55 @@ var Gallery = function(data) {
   this.previewNumbCurrent = previewNumbCurrent;
   this.previewNumbTotal = previewNumbTotal;
   this.overlayClose = overlayClose;
+  this.onCloseClick = this.onCloseClick.bind(this);
+  this.onLeftClick = this.onLeftClick.bind(this);
+  this.onRightClick = this.onRightClick.bind(this);
 };
 
 Gallery.prototype = {
 
   show: function(activePic) {
-    var self = this;
-    this.overlayClose.onclick = this.onCloseClick;
-    this.overlayLeft.onclick = this.onLeftClick;
-    this.overlayRight.onclick = this.onRightClick;
     this.overlayGallery.classList.remove('invisible');
+    var self = this;
     this.setActivePicture(activePic, self);
+    this.overlayClose.addEventListener('click', this.onCloseClick);
+    this.overlayLeft.addEventListener('click', this.onLeftClick);
+    this.overlayRight.addEventListener('click', this.onRightClick);
 
-    this.overlayClose.onclick = function() {
-      self.hide();
-    };
-
-    this.overlayLeft.onclick = function() {
-      self.onLeftClick();
-    };
-
-    this.overlayRight.onclick = function() {
-      self.onRightClick();
-    };
   },
 
   hide: function() {
     this.overlayGallery.classList.add('invisible');
   },
 
-  setActivePicture: function(activePic, self) {
+  setActivePicture: function(activePic) {
 
-    self.activePicture = activePic;
+    this.activePicture = activePic;
 
     var galleryLength = galleryPreview.children.length;
     if (galleryLength > 1) {
       galleryPreview.removeChild(galleryPreview.lastChild);
     }
     var photoImage = document.createElement('img');
-    photoImage.src = self.pictures[self.activePicture];
+    photoImage.src = this.pictures[this.activePicture];
     galleryPreview.appendChild(photoImage);
-    self.previewNumbCurrent.innerHTML = (self.activePicture + 1).toString();
+    this.previewNumbCurrent.innerHTML = (this.activePicture + 1).toString();
+  },
+
+  onCloseClick: function() {
+    this.hide();
   },
 
   onLeftClick: function() {
-    var self = this;
     if (this.activePicture > 0) {
-      Gallery.prototype.setActivePicture(this.activePicture - 1, self);
+      this.setActivePicture(this.activePicture - 1);
     }
   },
 
   onRightClick: function() {
-    var self = this;
     var lastImg = parseInt(previewNumbTotal.innerHTML, 10) - 1;
     if (this.activePicture < lastImg) {
-      Gallery.prototype.setActivePicture(this.activePicture + 1, self);
+      this.setActivePicture(this.activePicture + 1);
     }
   }
 };
