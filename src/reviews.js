@@ -6,10 +6,11 @@ var Review = require('./review');
 var reviewsList = document.querySelector('.reviews-list');
 var reviewsFilter = document.querySelector('.reviews-filter');
 var reviewsMore = document.querySelector('.reviews-controls-more');
-
 var pageNumber = 0;
 var pageSize = 3;
-var currentFilter = 'all';
+var currentFilter = localStorage.getItem('lastFilter') || 'reviews-all';
+document.querySelector('#' + currentFilter).checked = true;
+
 reviewsFilter.classList.add('invisible');
 
 var getReviews = function(reviews) {
@@ -32,6 +33,7 @@ var changeFilters = function(filterID) {
   currentFilter = filterID;
   pageNumber = 0;
   loadPageReviews(pageNumber++, currentFilter);
+  localStorage.setItem('lastFilter', currentFilter);
 };
 
 reviewsMore.addEventListener('click', function() {
@@ -39,9 +41,7 @@ reviewsMore.addEventListener('click', function() {
 });
 
 reviewsFilter.addEventListener('change', function(evt) {
-
   changeFilters(evt.target.id);
-
 });
 
 changeFilters(currentFilter);
