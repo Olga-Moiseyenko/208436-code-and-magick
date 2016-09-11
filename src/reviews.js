@@ -6,18 +6,10 @@ var Review = require('./review');
 var reviewsList = document.querySelector('.reviews-list');
 var reviewsFilter = document.querySelector('.reviews-filter');
 var reviewsMore = document.querySelector('.reviews-controls-more');
-var lastSavedFilter = localStorage.getItem('lastFilter');
-
 var pageNumber = 0;
 var pageSize = 3;
-var currentFilter;
-
-if(lastSavedFilter !== '') {
-  currentFilter = lastSavedFilter;
-  document.querySelector('#' + currentFilter).checked = true;
-} else {
-  currentFilter = 'all';
-}
+var currentFilter = localStorage.getItem('lastFilter') || 'reviews-all';
+document.querySelector('#' + currentFilter).checked = true;
 
 reviewsFilter.classList.add('invisible');
 
